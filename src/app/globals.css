@@ -1,0 +1,402 @@
+@import "tailwindcss";
+
+/*
+ * Tokens da NEPZERA. Loja = branco editorial com packshots em cinza (#EDEDED),
+ * campanha ABISSAL = azul-abismo com brilho bioluminescente. Não inventar cores fora daqui.
+ */
+:root {
+  color-scheme: light;
+  --paper: #ffffff;
+  --mist: #ebebeb; /* mesmo cinza do fundo dos packshots */
+  --ink: #111111;
+  --ink-2: #3b3b3b;
+  --mute: #6f6f6f;
+  --line: #e2e2e2;
+  --abyss: #070b0e;
+  --abyss-2: #0d151a;
+  --glow: #8ef3ea; /* isca do peixe-diabo */
+  --signal: #c8321f;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --announce-h: 34px;
+  --header-h: 64px;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-mist: var(--mist);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-mute: var(--mute);
+  --color-line: var(--line);
+  --color-abyss: var(--abyss);
+  --color-abyss-2: var(--abyss-2);
+  --color-glow: var(--glow);
+  --color-signal: var(--signal);
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  letter-spacing: 0.012em;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+/*
+ * Classes próprias ficam na camada "components": assim os utilitários do
+ * Tailwind (hidden, h-10, px-6…) continuam podendo sobrescrevê-las.
+ */
+@layer components {
+/* ───────────────────────────── tipografia ───────────────────────────── */
+
+.t-wide {
+  font-stretch: 125%;
+}
+.t-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ───────────────────────────── botões ───────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 48px;
+  padding: 0 1.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition:
+    background-color 0.25s var(--ease-out),
+    color 0.25s var(--ease-out),
+    border-color 0.25s var(--ease-out),
+    transform 0.25s var(--ease-out);
+}
+.btn:active {
+  transform: scale(0.98);
+}
+.btn-dark {
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+}
+.btn-dark:hover {
+  background: #2a2a2a;
+}
+.btn-dark:disabled {
+  background: #9a9a9a;
+  border-color: #9a9a9a;
+  cursor: not-allowed;
+}
+.btn-light {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--paper);
+}
+.btn-light:hover {
+  background: transparent;
+  color: var(--paper);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+}
+.btn-outline:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* link sublinhado que "corre" no hover */
+.u-link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.4s var(--ease-out);
+  padding-bottom: 2px;
+}
+.u-link:hover {
+  background-size: 0% 1px;
+  background-position: 100% 100%;
+}
+.u-hover {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.4s var(--ease-out);
+  padding-bottom: 2px;
+}
+.u-hover:hover,
+.u-hover[aria-current="page"] {
+  background-size: 100% 1px;
+}
+
+/* ───────────────────────────── marquee ───────────────────────────── */
+
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+.marquee:hover {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ───────────────────────────── hero ───────────────────────────── */
+
+.hero-img {
+  animation: hero-zoom 18s var(--ease-out) both;
+}
+@keyframes hero-zoom {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: scale(1.02);
+  }
+}
+.rise {
+  animation: rise 1.2s var(--ease-out) both;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* bolhas subindo no hero e no banner da campanha */
+.bubble {
+  position: absolute;
+  bottom: -20px;
+  border-radius: 9999px;
+  border: 1px solid rgb(142 243 234 / 0.45);
+  background: radial-gradient(circle at 30% 30%, rgb(255 255 255 / 0.35), rgb(142 243 234 / 0.05) 60%);
+  animation: bubble linear infinite;
+  pointer-events: none;
+}
+@keyframes bubble {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate3d(14px, -55vh, 0);
+  }
+  100% {
+    transform: translate3d(-10px, -110vh, 0);
+    opacity: 0;
+  }
+}
+
+.glow-pulse {
+  animation: glow-pulse 4.5s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.scroll-cue {
+  animation: scroll-cue 2.2s var(--ease-out) infinite;
+}
+@keyframes scroll-cue {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+
+/* ───────────────────────────── revelação no scroll ───────────────────────────── */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s var(--ease-out),
+    transform 0.9s var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+html:not(.js) [data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ───────────────────────────── cards ───────────────────────────── */
+
+.card-media img {
+  transition:
+    opacity 0.6s var(--ease-out),
+    transform 1.2s var(--ease-out);
+}
+.card-media .alt {
+  opacity: 0;
+}
+@media (hover: hover) {
+  .card:hover .card-media .alt {
+    opacity: 1;
+  }
+  .card:hover .card-media .main {
+    opacity: 0;
+  }
+  .card:hover .card-media img {
+    transform: scale(1.035);
+  }
+  .card:hover .quick {
+    transform: none;
+    opacity: 1;
+  }
+}
+.quick {
+  transform: translateY(100%);
+  opacity: 0;
+  transition:
+    transform 0.45s var(--ease-out),
+    opacity 0.45s var(--ease-out);
+}
+.card:focus-within .quick {
+  transform: none;
+  opacity: 1;
+}
+
+/* trilho horizontal sem barra de rolagem */
+.rail {
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
+.rail > * {
+  scroll-snap-align: start;
+}
+
+/* zoom suave nas imagens editoriais */
+.zoom-img img {
+  transition: transform 1.4s var(--ease-out);
+}
+.zoom-img:hover img {
+  transform: scale(1.05);
+}
+
+/* grão de filme sobre fundos escuros */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* gaveta e overlays */
+.drawer-enter {
+  animation: drawer-in 0.5s var(--ease-out) both;
+}
+@keyframes drawer-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+.fade-in {
+  animation: fade-in 0.35s ease both;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+.drop-in {
+  animation: drop-in 0.4s var(--ease-out) both;
+}
+@keyframes drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+} /* fim de @layer components */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+  .bubble {
+    display: none;
+  }
+}
