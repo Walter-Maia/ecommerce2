@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getProduct, PRODUCTS, productImages, related } from "@/data/catalog";
-import { LOOKBOOK } from "@/data/site";
+import { LOOKBOOK, SITE } from "@/data/site";
 import { pixPrice } from "@/lib/format";
 import { Gallery } from "@/components/pdp/Gallery";
 import { BuyBox } from "@/components/pdp/BuyBox";
@@ -43,7 +43,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     name: product.name,
     description: product.description,
     color: product.color,
-    image: images.map((i) => i.src),
+    image: images.map((i) => `${SITE.url}${i.src}`),
     brand: { "@type": "Brand", name: "NEPZERA" },
     offers: {
       "@type": "Offer",

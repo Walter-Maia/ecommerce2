@@ -1,5 +1,7 @@
 # NEPZERA — e-commerce de demonstração
 
+**No ar:** https://walter-maia.github.io/ecommerce2/
+
 Loja de streetwear autoral da **NEPZERA** (marca fictícia), coleção **ABISSAL — Capítulo 03**. Visual inspirado no padrão das lojas de drop brasileiras: hero em tela cheia antes do cabeçalho, faixa de avisos correndo, packshots em fundo cinza com as costas no hover, preço no Pix em destaque e "Ver tudo" no fim das grades. Marca, peças, pessoas e textos são originais; todas as imagens foram geradas no Higgsfield (ver [`docs/ASSETS.md`](docs/ASSETS.md)).
 
 ## Rodar
@@ -12,6 +14,18 @@ npm run dev        # http://localhost:3000
 npm run build && npm start
 npm run lint
 ```
+
+## GitHub Pages
+
+Cada push na `main` roda `.github/workflows/pages.yml`, que gera o site estático (`STATIC_EXPORT=true`, saída em `out/`) e publica no Pages. O subcaminho (`/ecommerce2`) e o endereço público vêm do próprio Pages. No modo estático não há otimização de imagem nem headers: as imagens já são WebP no tamanho final e passam por `src/lib/static-image-loader.ts`, que só acrescenta o subcaminho.
+
+Para testar o build estático localmente (bash):
+
+```bash
+STATIC_EXPORT=true PAGES_BASE_PATH=/ecommerce2 npm run build
+```
+
+No Git Bash do Windows, prefixe com `MSYS_NO_PATHCONV=1`, senão `/ecommerce2` vira um caminho do Windows. O export no Windows também grava os arquivos de prefetch (`__next.*.txt`) em subpastas em vez de nomes com pontos (bug do Next com `\`), o que gera 404 de prefetch só nesse teste local; o build do Actions roda em Linux e sai certo.
 
 ## O que tem
 

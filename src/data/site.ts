@@ -5,7 +5,8 @@ export const SITE = {
   tagline: "Vestuário de autor",
   description:
     "NEPZERA é streetwear autoral brasileiro: camisetas ilustradas, moletons pesados e peças de coleção em tiragens curtas. Coleção ABISSAL — Capítulo 03 já disponível.",
-  url: "http://localhost:3000",
+  /** Endereço público; no GitHub Pages vem do workflow (ex.: https://usuario.github.io/repo). */
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   instagram: "https://instagram.com",
   tiktok: "https://tiktok.com",
 } as const;
